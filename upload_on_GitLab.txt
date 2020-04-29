@@ -1,0 +1,18 @@
+1. configure :
+
+$ git config --global user.name Yuhan Hu
+$ git config --global user.email Yhu80@sheffield.ac.uk
+
+2. set up environment 
+$ git init
+$ git add [filename]
+$ git commit -m "[comment]"
+
+3. connect to URL:
+$ git remote add origin [dataURL]
+
+4. pull
+$ git pull origin master
+
+5. last step
+$git push -u origin master
