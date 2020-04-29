@@ -46,6 +46,18 @@
   ros.on('close', function() {
     console.log('Connection to websocket server closed.');
   });
+
+// publish Null to ROS topic
+
+ var TypeNode = new ROSLIB.Topic({
+   ros : ros,
+   name : '/selected_type',
+   messageType : 'std_msgs/String.msg'
+});
+
+var message_null = new ROSLIB.Message(
+ {data: "Null"});
+TypeNode.publish(message_null);
 </script>
 
 <script>
@@ -63,17 +75,9 @@ function getType(){
 // publish a message on node
 // Publishing a Topic
 
- var TypeNode = new ROSLIB.Topic({
-   ros : ros,
-   name : '/selected_type',
-   messageType : 'std_msgs/String.msg'
-});
-
 var message_content = new ROSLIB.Message(
  {data: check_val.toString()});
 TypeNode.publish(message_content);
-
-
 
 // Subscribing to a Topic
   // ----------------------
