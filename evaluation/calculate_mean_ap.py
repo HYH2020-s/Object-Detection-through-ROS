@@ -275,13 +275,13 @@ def plot_pr_curve(
     ax.set_ylim([0.0,1.2])
     return ax
 
-
+import sys
 if __name__ == "__main__":
-
-    with open('ground_truth_boxes.json') as infile:
+    # print(sys.argv)
+    with open(sys.argv[1] + 'ground_truth_boxes.json') as infile:
         gt_boxes = json.load(infile)
 
-    with open('predicted_boxes.json') as infile:
+    with open(sys.argv[2] + 'predicted_boxes.json') as infile:
         pred_boxes = json.load(infile)
 
     # Runs it for one IoU threshold
