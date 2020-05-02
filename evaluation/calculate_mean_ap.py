@@ -278,10 +278,10 @@ def plot_pr_curve(
 import sys
 if __name__ == "__main__":
     # print(sys.argv)
-    with open(sys.argv[1] + 'ground_truth_boxes.json') as infile:
+    with open(sys.argv[1] + 'ground_truth_boxes-' + sys.argv[3] + '.json') as infile:
         gt_boxes = json.load(infile)
 
-    with open(sys.argv[2] + 'predicted_boxes.json') as infile:
+    with open(sys.argv[2] + 'predicted_boxes-' + sys.argv[3] + '.json') as infile:
         pred_boxes = json.load(infile)
 
     # Runs it for one IoU threshold
