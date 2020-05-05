@@ -22,15 +22,16 @@ clients total.
 2020-04-30 20:06:04+0100 [-] [INFO] [1588273564.122323]: [Client 25] Subscribed to /listener
 2020-04-30 20:06:08+0100 [-] [INFO] [1588273568.685218]: Client disconnected. 0 clients total.
 
-4. Set parameters on  showImage.html file 
+4. Specify the path and total number of images want to show on showImage.html file 
 
-IndexLength : The digits of image index
-
-eg : total number of images: from image00.jpg to image99.jpg  ----Path : "./Image"
+eg : total number of images: from image0.jpg to image99.jpg
+     Path : "./Image"
 
      var Path = "./Image/image%s.jpg"
-     var TotalNumImage = 100;
-     var IndexLength = 2;
+
+     for(var i=0;i<100;i++){
+	Img[i]= Path.format(i);
+	}  
 
 5. Run html file on web browser
  

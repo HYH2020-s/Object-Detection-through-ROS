@@ -73,12 +73,15 @@ function getType(){
 	for(k in obj){
 	    if(obj[k].checked)
 		check_val.push(obj[k].value);
-		}
+	}
+
+
 // publish a message on node
 // Publishing a Topic
-
-var message_content = new ROSLIB.Message(
- {data: check_val.toString()});
+var Input = document.getElementById("InputPath").value.toString()
+var message_content = new ROSLIB.Message({
+ data :check_val.toString(),Input
+ });
 TypeNode.publish(message_content);
 
 // Subscribing to a Topic
@@ -116,13 +119,16 @@ window.open('showImage.html');
       <div class="row h-100">
         <div class="col-12 my-auto">
           <div class="masthead-content text-white py-5 py-md-0">
-            <h1 class="mb-3">Object Detection on ROS</h1>
+            <h1 class="mb-3">Object Detection With ROS</h1>
             <p class="mb-5"> Choose what you want to detect
-              <strong>on ROS</strong>
+              <strong>with ROS</strong>
 	   </p>
 	   <p class="mb-3"><strong>Team 16</strong></p>
-	 <p class= "text-nowrap">Renxiao Kuang  &  Yuhan Hu  &  Chanho Park  &  Yuan Ru  &  
-Qingyuan Yang  </p>
+	 <div class= "text-nowrap">Renxiao Kuang  &  Yuhan Hu  &  Chanho Park  &  Yuan Ru  &  
+Qingyuan Yang  </div>
+	<p class="input-group">
+            <input type="text" class="form-control" placeholder="input path of your file here" id="InputPath">
+        </p>
 	 <input type="checkbox" name="type" value="people"/><span>people</span>
 	 <input type="checkbox" name="type" value="car"/><span>car</span>
 	 <a href="#" onclick = "getType()" id="display" class="btn btn-success" rel="popover">start</a>
