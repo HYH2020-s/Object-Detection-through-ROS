@@ -1,0 +1,11 @@
+(eval) chanho@Chanhos-iMac evaluation % python calculate_mean_ap.py mb1-ssd person
+ground_truth_boxes/ground_truth_boxes-person.json
+predicted_boxes/predicted_boxes-mb1-ssd-person.json
+Single IoU calculation took 0.0066 secs
+avg precision: 0.0909
+map: 6.73
+avg precs:  [0.0909, 0.0909, 0.0909, 0.0909, 0.0909, 0.0909, 0.0545, 0.0364, 0.0364, 0.0]
+iou_thrs:   [0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95]
+
+Plotting and calculating mAP takes 0.1711 secs
+

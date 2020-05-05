@@ -258,7 +258,7 @@ def get_avg_precision_at_iou(gt_boxes, pred_boxes, iou_thr=0.5):
 
 
 def plot_pr_curve(
-    precisions, recalls, category='Person', label=None, color=None, ax=None):
+    precisions, recalls, model_name='', category='Person', label=None, color=None, ax=None):
     """Simple plotting helper function"""
 
     if ax is None:
@@ -270,7 +270,10 @@ def plot_pr_curve(
     ax.scatter(recalls, precisions, label=label, s=20, color=color)
     ax.set_xlabel('recall')
     ax.set_ylabel('precision')
-    ax.set_title('Precision-Recall curve for {}'.format(category))
+    if model_name != '':
+        ax.set_title('Precision-Recall curve for {} of {}'.format(category, model_name))
+    else:
+        ax.set_title('Precision-Recall curve for {}'.format(category))
     ax.set_xlim([0.0,1.3])
     ax.set_ylim([0.0,1.2])
     return ax
@@ -306,7 +309,7 @@ if __name__ == "__main__":
         precisions = data['precisions']
         recalls = data['recalls']
         ax = plot_pr_curve(
-            precisions, recalls, label='{:.2f}'.format(iou_thr), color=COLORS[idx*2], ax=ax)
+            precisions, recalls, model_name=sys.argv[1], category=sys.argv[2], label='{:.2f}'.format(iou_thr), color=COLORS[idx*2], ax=ax)
 
     # prettify for printing:
     avg_precs = [float('{:.4f}'.format(ap)) for ap in avg_precs]
@@ -319,4 +322,5 @@ if __name__ == "__main__":
         plt.vlines(xval, 0.0, 1.1, color='gray', alpha=0.3, linestyles='dashed')
     end_time = time.time()
     print('\nPlotting and calculating mAP takes {:.4f} secs'.format(end_time - start_time))
-    plt.show()
+#     plt.show()
+    plt.savefig('results/mAP-' + sys.argv[1] + '-' + sys.argv[2] + '.png')
