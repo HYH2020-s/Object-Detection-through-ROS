@@ -13,13 +13,22 @@
            return args[count++];
     });
          }
+    function PrefixInteger(num, length) {
+        return (Array(length).join('0') + num).slice(-length);
+    }
+
 
         //-------------------------------------------
 	// change path here to play your own images!
-	var Path = "/home/hu1997/Image/%s.jpg";
+	var Path = "img/%s.png";
 	Img = new Array();
-	for(var i=1;i<5;i++){
-	Img[i-1]= Path.format(i);
+	// set total number of Image here
+	var TotalNumImage = 4;
+	// set the length of image index
+	var IndexLength = 4;
+	for(var i=0;i<TotalNumImage;i++){
+	    index = PrefixInteger(i,IndexLength)
+	    Img[i]= Path.format(index);
 	}
         size = Img.length;
         i = 0;
