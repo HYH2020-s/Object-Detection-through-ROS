@@ -1,6 +1,16 @@
 This folder is uset as the font-end web page for our Real-Time object detection project.
 
-How to run this web page:
+[ ROS node]
+
+1. get category:
+	name : '/selected_type',
+   	messageType : 'std_msgs/String.msg'
+
+2. get path:
+	name : '/input_path',
+   	messageType : 'std_msgs/String.msg'
+
+[ How to run this web page ]
 
 1. install ROS kinetic 
 
@@ -34,3 +44,4 @@ eg : total number of images: from image00.jpg to image99.jpg  ----Path : "./Imag
 
 5. Run html file on web browser
  
+

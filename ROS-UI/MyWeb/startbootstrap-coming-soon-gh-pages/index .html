@@ -49,15 +49,24 @@
 
 // publish Null to ROS topic
 
- var TypeNode = new ROSLIB.Topic({
+var TypeNode = new ROSLIB.Topic({
    ros : ros,
    name : '/selected_type',
-   messageType : 'std_msgs/String.msg'
+   messageType : 'std_msgs/String'
 });
 
 var message_null = new ROSLIB.Message(
  {data: "Null"});
-TypeNode.publish(message_null);
+TypeNode.publish(message_null,66);
+
+// new topic to publish input path
+var PathNode = new ROSLIB.Topic({
+   ros : ros,
+   name : '/input_path',
+   messageType : 'std_msgs/String'
+});
+
+
 </script>
 
 
@@ -73,13 +82,29 @@ function getType(){
 	for(k in obj){
 	    if(obj[k].checked)
 		check_val.push(obj[k].value);
-		}
+	}
+
+
 // publish a message on node
 // Publishing a Topic
+if(check_val.toString()=="")
+{alert("Please choose at least one category!")}
+var Input = document.getElementById("InputPath").value.toString()
+if(Input=="")
+{alert("Please input the path!!")}
 
-var message_content = new ROSLIB.Message(
- {data: check_val.toString()});
-TypeNode.publish(message_content);
+if(check_val.toString()!="" && Input!="")
+{var message_content = new ROSLIB.Message({
+ data :check_val.toString()
+ });
+TypeNode.publish(message_content,66);
+
+// publish path 
+
+var message_path = new ROSLIB.Message({
+ data :Input
+ });
+PathNode.publish(message_path,66);
 
 // Subscribing to a Topic
   // ----------------------
@@ -96,7 +121,7 @@ TypeNode.publish(message_content);
 
 //open new window
 window.open('showImage.html');
-
+}
 }
 
 
@@ -116,13 +141,16 @@ window.open('showImage.html');
       <div class="row h-100">
         <div class="col-12 my-auto">
           <div class="masthead-content text-white py-5 py-md-0">
-            <h1 class="mb-3">Object Detection on ROS</h1>
+            <h1 class="mb-3">Object Detection With ROS</h1>
             <p class="mb-5"> Choose what you want to detect
-              <strong>on ROS</strong>
+              <strong>with ROS</strong>
 	   </p>
 	   <p class="mb-3"><strong>Team 16</strong></p>
-	 <p class= "text-nowrap">Renxiao Kuang  &  Yuhan Hu  &  Chanho Park  &  Yuan Ru  &  
-Qingyuan Yang  </p>
+	 <div class= "text-nowrap">Renxiao Kuang  &  Yuhan Hu  &  Chanho Park  &  Yuan Ru  &  
+Qingyuan Yang  </div>
+	<p class="input-group">
+            <input type="text" class="form-control" placeholder="input path of your file here" id="InputPath">
+        </p>
 	 <input type="checkbox" name="type" value="people"/><span>people</span>
 	 <input type="checkbox" name="type" value="car"/><span>car</span>
 	 <a href="#" onclick = "getType()" id="display" class="btn btn-success" rel="popover">start</a>
