@@ -8,4 +8,6 @@ python calculate_mean_ap.py yolov3 person
 python calculate_mean_ap.py yolov3 car
 python calculate_mean_ap.py yolov3-tiny person
 python calculate_mean_ap.py yolov3-tiny car
+python calculate_mean_ap.py ssd-mobilenet-opencv person
+python calculate_mean_ap.py ssd-mobilenet-opencv car
 
