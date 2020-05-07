@@ -30,7 +30,6 @@
 <script>
 // Connecting to ROS
   // -----------------
-
   var ros = new ROSLIB.Ros({
     url : 'ws://localhost:9090'
   });
@@ -48,16 +47,23 @@
   });
 
 // publish Null to ROS topic
-
+var isClick = false;
 var TypeNode = new ROSLIB.Topic({
    ros : ros,
    name : '/selected_type',
    messageType : 'std_msgs/String'
 });
 
-var message_null = new ROSLIB.Message(
- {data: "Null"});
-TypeNode.publish(message_null,66);
+ var message_null = new ROSLIB.Message(
+{data: "Null"});
+
+//set time frequency
+var sendNullTimer = setInterval(function () {
+	TypeNode.publish(message_null);
+       if(isClick==true){
+	clearInterval(sendNullTimer);}
+   }, 100);
+
 
 // new topic to publish input path
 var PathNode = new ROSLIB.Topic({
@@ -65,7 +71,6 @@ var PathNode = new ROSLIB.Topic({
    name : '/input_path',
    messageType : 'std_msgs/String'
 });
-
 
 </script>
 
@@ -76,6 +81,8 @@ var PathNode = new ROSLIB.Topic({
 //		  3. subscribe topic and get the result	
 //                4. open a new window to show results
 function getType(){
+
+isClick = true;
 //var type = document.getElementByName('TypeOfObject').value.toString();
 	obj = document.getElementsByName("type");
 	check_val = [];
@@ -89,35 +96,27 @@ function getType(){
 // Publishing a Topic
 if(check_val.toString()=="")
 {alert("Please choose at least one category!")}
-var Input = document.getElementById("InputPath").value.toString()
-if(Input=="")
-{alert("Please input the path!!")}
 
-if(check_val.toString()!="" && Input!="")
-{var message_content = new ROSLIB.Message({
- data :check_val.toString()
- });
-TypeNode.publish(message_content,66);
+if((document.getElementById("InputPath").value.toString())=="")
+{alert("Please input path!")}
+
+if(check_val.toString()!="" && (document.getElementById("InputPath").value.toString())!="")
+{
+setInterval(function () {
+	var message_content = new ROSLIB.Message({
+ 		data : check_val.toString()
+ 		});
+	TypeNode.publish(message_content);
+   }, 100);
 
 // publish path 
-
-var message_path = new ROSLIB.Message({
- data :Input
- });
-PathNode.publish(message_path,66);
-
-// Subscribing to a Topic
-  // ----------------------
-  var listener = new ROSLIB.Topic({
-    ros : ros,
-    name : '/listener',
-    messageType : 'std_msgs/String'
-  });
-
-  listener.subscribe(function(message) {
-    alert('Received message on ' + listener.name + ': ' + message.data);
-    listener.unsubscribe();
-  });
+setInterval(function () {
+	var message_path = new ROSLIB.Message({
+		
+ 		data :(document.getElementById("InputPath").value.toString())
+	 });
+	PathNode.publish(message_path);
+   }, 100);
 
 //open new window
 window.open('showImage.html');
@@ -151,7 +150,7 @@ Qingyuan Yang  </div>
 	<p class="input-group">
             <input type="text" class="form-control" placeholder="input path of your file here" id="InputPath">
         </p>
-	 <input type="checkbox" name="type" value="people"/><span>people</span>
+	 <input type="checkbox" name="type" value="person"/><span>person</span>
 	 <input type="checkbox" name="type" value="car"/><span>car</span>
 	 <a href="#" onclick = "getType()" id="display" class="btn btn-success" rel="popover">start</a>
               </div>
