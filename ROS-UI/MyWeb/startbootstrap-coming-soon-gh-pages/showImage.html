@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <script type="text/javascript" src="http://cdn.robotwebtools.org/EventEmitter2/current/eventemitter2.min.js"></script>
+  <script type="text/javascript" src="http://cdn.robotwebtools.org/roslibjs/current/roslib.min.js"></script>
+  <script type="text/javascript" src="http://static.robotwebtools.org/EventEmitter2/current/eventemitter2.js"></script>
+  <script type="text/javascript" src="http://static.robotwebtools.org/roslibjs/current/roslib.js"></script>
+  <script type="text/javascript" type="text/javascript"></script>
+    <title>Result</title>
+    <script language="javascript">
+  
+// rewrite format() for String type    
+   String.prototype.format= function(){
+    	   var args = Array.prototype.slice.call(arguments);
+    	   var count=0;
+    	//replace %s
+    	   return this.replace(/%s/g,function(s,i){
+           return args[count++];
+    		});
+         	}
+
+// pad digits with 0
+    function PrefixInteger(num, length) {
+        return (Array(length).join('0') + num).slice(-length);
+    }
+ 
+
+    var ros = new ROSLIB.Ros({
+                url : 'ws://localhost:9090'
+  		});
+
+	// Subscribing to image number topic
+	// ----------------------
+	var listener = new ROSLIB.Topic({
+    			ros : ros,
+    			name : 'file_Num',
+    			messageType : 'std_msgs/Int8'
+		});
+	// get total number of Image here
+
+	listener.subscribe(function(message){
+  	var TotalNumImage = message.data;		   
+        //-------------------------------------------
+	// change path here to play your own images!
+	//-------------------------------------------
+	var Path = "/home/hu1997/Image/%s.jpg";
+	Img = new Array();
+	// set the length of image index
+	var IndexLength = 4;
+	// store image.src in an Array 
+	Img[0] = "img/loading.gif"
+	for(var i=1;i<=TotalNumImage;i++){
+	   	if(i<10000){
+	    		index = PrefixInteger(i,IndexLength)
+	    		Img[i]= Path.format(index);
+	     		}
+	    	else{Img[i] = Path.format(i)}
+	      }
+ 	size = Img.length;
+	chImg(Img,size-1);
+        listener.unsubscribe();});
+	//-------------------------------------------
+	// check whether image exits
+	function imageExists(url){
+     			var ImgObj = new Image();  
+     			ImgObj.src = url;  
+     				if (ImgObj.fileSize > 0 || (ImgObj.width > 0 && ImgObj.height > 0)) 
+				     {return true;} 
+				else {return false;}
+				}
+	i = 0;
+	function chImg(TotalNumImage){
+		if(imageExists(Img[i])==true)
+			{picID.src = Img[i];
+   			i++;
+			console.log("success")
+	    		setTimeout("chImg()",66);
+            	while (i>=size) {i = 0;alert("Start to Play Again")};}
+		else{
+	           picID.src = Img[i-1];
+		   setTimeout("chImg()",66);
+			console.log(i)	 
+		   }
+        	}
+
+// new topic to publish input path        
+function KillProcess(){
+   setInterval(function() {
+	var end_msg = new ROSLIB.Message({
+ 		data : "end"
+ 		});
+	End.publish(end_msg);
+   }, 100);
+  window.close();
+  }     
+        //-->
+    </SCRIPT>
+
+<script>
+var End = new ROSLIB.Topic({
+    ros : ros,
+    name : '/end_msg',
+    messageType : 'std_msgs/String'
+    });
+</script>
+</head>
+<body onLoad="chImg()">
+<div><img id="picID" height:50%;></div>
+<div style="text-align:center"><button onClick ="KillProcess()">Stop</button></div>
+</body>
+
+</html>
+
