@@ -1,0 +1,191 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+<script type="text/javascript" src="http://cdn.robotwebtools.org/EventEmitter2/current/eventemitter2.min.js"></script>
+<script type="text/javascript" src="http://cdn.robotwebtools.org/roslibjs/current/roslib.min.js"></script>
+
+<script type="text/javascript" type="text/javascript"></script>
+
+<script type="text/javascript" src="http://static.robotwebtools.org/EventEmitter2/current/eventemitter2.js"></script>
+<script type="text/javascript" src="http://static.robotwebtools.org/roslibjs/current/roslib.js"></script>
+<script type="text/javascript" type="text/javascript"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom fonts for this template -->
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,200i,300,300i,400,400i,600,600i,700,700i,900,900i" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Merriweather:300,300i,400,400i,700,700i,900,900i" rel="stylesheet">
+  <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+
+  <!-- Custom styles for this template -->
+  <link href="css/coming-soon.min.css" rel="stylesheet">
+<script type="text/javascript" type="text/javascript"></script>
+<script>
+// Connecting to ROS
+  // -----------------
+  var ros = new ROSLIB.Ros({
+    url : 'ws://localhost:9090'
+  });
+
+  ros.on('connection', function() {
+    console.log('Connected to websocket server.');
+  });
+
+  ros.on('error', function(error) {
+    console.log('Error connecting to websocket server: ', error);
+  });
+
+  ros.on('close', function() {
+    console.log('Connection to websocket server closed.');
+  });
+
+// publish Null to ROS topic
+var isClick = false;
+var TypeNode = new ROSLIB.Topic({
+   ros : ros,
+   name : '/selected_type',
+   messageType : 'std_msgs/String'
+});
+
+ var message_null = new ROSLIB.Message({data: "Null"});
+
+//set time frequency
+var sendNullTimer = setInterval(function () {
+	TypeNode.publish(message_null);
+       if(isClick==true){
+	clearInterval(sendNullTimer);}
+   }, 66);
+
+
+// new topic to publish input path
+var PathNode = new ROSLIB.Topic({
+   ros : ros,
+   name : '/input_path',
+   messageType : 'std_msgs/String'
+});
+
+</script>
+
+<script>
+// main function: 1.get the choosen category
+//	          2.send choosen type to new topic : /selected_type
+//		  3. subscribe topic and get the result	
+//                4. open a new window to show results
+function getType(){
+
+isClick = true;
+//var type = document.getElementByName('TypeOfObject').value.toString();
+	obj = document.getElementsByName("type");
+	check_val = [];
+	for(k in obj){
+	    if(obj[k].checked)
+		check_val.push(obj[k].value);
+	}
+
+
+// publish a message on node
+// Publishing a Topic
+if(check_val.toString()=="")
+{alert("Please choose at least one category!")}
+
+if((document.getElementById("InputPath").value.toString())=="")
+{alert("Please input path!")}
+
+if(check_val.toString()!="" && (document.getElementById("InputPath").value.toString())!="")
+{
+setInterval(function () {
+	var message_content = new ROSLIB.Message({
+ 		data : check_val.toString()
+ 		});
+	TypeNode.publish(message_content);
+   }, 66);
+
+// publish path 
+setInterval(function () {
+	var message_path = new ROSLIB.Message({
+		
+ 		data :(document.getElementById("InputPath").value.toString())
+	 });
+	PathNode.publish(message_path);
+   }, 66);
+
+//open new window
+window.open('showImage.html');
+}
+}
+
+
+</script>
+</head>
+
+<body>
+  <title>Object Detection</title>
+  <div class="overlay"></div>
+  <video playsinline="playsinline" autoplay="autoplay" muted="muted" loop="loop">
+    <source src="mp4/bg.mp4" type="video/mp4">
+  </video>
+
+  <div class="masthead">
+    <div class="masthead-bg"></div>
+    <div class="container h-100">
+      <div class="row h-100">
+        <div class="col-12 my-auto">
+          <div class="masthead-content text-white py-5 py-md-0">
+            <h1 class="mb-3">Object Detection With ROS</h1>
+            <p class="mb-5"> Choose what you want to detect
+              <strong>with ROS</strong>
+	   </p>
+	   <p class="mb-3"><strong>Team 16</strong></p>
+	 <div class= "text-nowrap">Renxiao Kuang  &  Yuhan Hu  &  Chanho Park  &  Yuan Ru  &  
+Qingyuan Yang  </div>
+	<p class="input-group">
+            <input type="text" class="form-control" placeholder="input path of your file here" id="InputPath">
+        </p>
+	 <input type="checkbox" name="type" value="person"/><span>person</span>
+	 <input type="checkbox" name="type" value="car"/><span>car</span>
+	 <a href="#" onclick = "getType()" id="display" class="btn btn-success" rel="popover">start</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="social-icons">
+    <ul class="list-unstyled text-center mb-0">
+      <li class="list-unstyled-item">
+        <a href="#">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </li>
+      <li class="list-unstyled-item">
+        <a href="#">
+          <i class="fab fa-facebook-f"></i>
+        </a>
+      </li>
+      <li class="list-unstyled-item">
+        <a href="#">
+          <i class="fab fa-instagram"></i>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Custom scripts for this template -->
+  <script src="js/coming-soon.min.js"></script>
+  <!--Connect with ROS through port 9090 -->
+</body>
+
+</html>
